@@ -17,8 +17,15 @@ bot.direction = function(game) {
         }
     }
 
-        myDir = dirs[Math.floor(Math.random() * 4)];
+//This code decides what to do
+var task = "none"
 
+//This code decides how to do it
+if(task == "none"){
+    console.log("Going random!")
+    myDir = dirs[Math.floor(Math.random() * 4)];
+}
+    
     return myDir;
 } //DO NOT CHANGE ANYTHING BELOW THIS LINE
 bot();
