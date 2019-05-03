@@ -10,8 +10,6 @@ bot.direction = function(game) {
     var enemyBases = [];
     var myDir = "none";
     var grabNear = false;
-    // bot.savedData.push("what");
-    console.log(game.myBot);
 
     var dirs = ["north", "east", "south", "west"];
 
@@ -62,6 +60,15 @@ bot.direction = function(game) {
         }
     }
 
+    var grabBase = false;
+    var nearBase = enemyBases[0];
+    for (let i = 0; i < enemyBases.length; i++) {
+        if (bot.findDistance(game.myBot.pos, enemyBases[i].pos) <= 2 && enemyBases[i].pollen > 50 && bot.findDistance(enemyBots[i].pos, enemyBases[i].pos) > 5) {
+            nearBase = enemyBases[i];
+            grabBase = true;
+        }
+    }
+
     // Determine avoid and others for enemyBots and Bases
     for (let i = 0; i < enemyBots.length; i++) {
         // avoid bots with less pollen than me
@@ -86,6 +93,9 @@ bot.direction = function(game) {
     if (stepsToBase * game.players.length + 4 >= turnsLeft) {
         console.log("game ending, go home!");
         task = "go home";
+    }
+    else if (grabBase) {
+        task = "steal base";
     }
     else if (grabNear) {
         task = "grab near";
@@ -116,6 +126,15 @@ bot.direction = function(game) {
         if (myDir === undefined) {
             bot.clearAvoid();
             myDir = bot.nextStep(game.myBot.pos, game.myBase.pos);
+        }
+    }
+
+    else if (task === "steal base") {
+        myDir = bot.nextStep(game.myBot.pos, nearBase.pos);
+        console.log("Stealing from Base!")
+        if (myDir === undefined) {
+            bot.clearAvoid();
+            myDir = bot.nextStep(game.myBot.pos, nearBase.pos);
         }
     }
 

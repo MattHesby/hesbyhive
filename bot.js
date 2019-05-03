@@ -6,20 +6,12 @@ function bot() {
     bot.socket.emit("name", bot.key);
 
     bot.savedData = [];
-    
+
     var globalGame;
     bot.socket.on("update", function(game) {
 
         console.log("----------------------------------------------")
         console.log("      \x1b[4m%s\x1b[0m", "Game number " + (game.gameId + 1));
-        console.log("\x1b[31m", "Energy - Base Energy", "\x1b[0m");
-
-        console.log("\x1b[31m", "My Bot " + "\x1b[0m" + game.myBot.energy + " - " + game.bases[game.idTurn].energy);
-        for (var i = 0; i < game.players.length; i++) {
-            if (i != game.myBot.id) {
-                console.log("\x1b[31m", "Bot " + (i + 1) + "\x1b[0m " + game.players[i].energy + " - " + game.bases[i].energy);
-            }
-        }
         console.log("\x1b[33m", "Turn: " + game.turn + "/" + game.totalTurns, "\x1b[0m")
 
         console.log("----------------------------------------------")
@@ -65,7 +57,7 @@ function bot() {
         }
     }
 
-
+    //
     bot.avoidSpace = function(pos) {
 
         let enemyPos = JSON.parse(JSON.stringify(pos));
