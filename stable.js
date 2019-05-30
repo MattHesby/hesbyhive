@@ -1,6 +1,6 @@
 var bot = require("./bot"); //Don't change this
-bot.hostURL = 'http://rainierai19-matthesby1.c9users.io'; //Put the server url/IP adress here!
-bot.key = "n02q3j7xifs"; //Set your bot key to this string!
+bot.hostURL = 'http://denaliai19-matthesby1.c9users.io'; //Put the server url/IP adress here!
+bot.key = "6zh4j2tpogk"; //Set your bot key to this string!
 /***************************************************/
 //Write your code in this function!!!
 bot.direction = function(game) {
@@ -31,7 +31,7 @@ bot.direction = function(game) {
     // Find's flowr with most pollen
     var flowerMostPollen = game.flowers[0];
     for (let i = 0; i < game.flowers.length; i++) {
-        if (game.flowers[i].pollen > flowerMostPollen.pollen) {
+        if (game.flowers[i].pollen / bot.findDistance(game.myBot.pos, game.flowers[i].pos) > flowerMostPollen.pollen) {
             flowerMostPollen = game.flowers[i];
         }
     }
@@ -63,9 +63,18 @@ bot.direction = function(game) {
     var grabBase = false;
     var nearBase = enemyBases[0];
     for (let i = 0; i < enemyBases.length; i++) {
-        if (bot.findDistance(game.myBot.pos, enemyBases[i].pos) <= 2 && enemyBases[i].pollen > 50 && bot.findDistance(enemyBots[i].pos, enemyBases[i].pos) > 5) {
+        if (bot.findDistance(game.myBot.pos, enemyBases[i].pos) <= 4 && enemyBases[i].pollen > 50 && bot.findDistance(enemyBots[i].pos, enemyBases[i].pos) > 3) {
             nearBase = enemyBases[i];
             grabBase = true;
+        }
+    }
+
+    var currentWinner = enemyBases[0];
+    var winnerId = 0;
+    for (let i = 0; i < enemyBases.length; i++) {
+        if (currentWinner.pollen < enemyBases[i].pollen) {
+            currentWinner = enemyBases[i];
+            winnerId = i;
         }
     }
 
@@ -90,15 +99,19 @@ bot.direction = function(game) {
     /* ~~ This code decides what to do ~~ */
     var task = "most flower ppd";
 
-    if (stepsToBase * game.players.length + 4 >= turnsLeft) {
+    if (stepsToBase * game.players.length + 2 >= turnsLeft) {
         console.log("game ending, go home!");
         task = "go home";
     }
     else if (grabBase) {
         task = "steal base";
     }
+
     else if (grabNear) {
         task = "grab near";
+    }
+    else if ((currentWinner.pollen > game.myBase.pollen + 200 && bot.findDistance(currentWinner.pos, enemyBots[winnerId].pos) > 3 ) || (bot.findDistance(game.myBot.pos, currentWinner.pos) < 2) && currentWinner.pollen > 40 && bot.findDistance(currentWinner.pos, enemyBots[winnerId].pos) > 3) {
+        task = "steal from winner";
     }
     else if (game.myBot.pollen > 200) {
         task = "go home";
@@ -106,6 +119,8 @@ bot.direction = function(game) {
     // else if (game.myBot.pollen < enemyMostPollen.pollen) {
     //     task = "chase most";
     // }
+
+    console.log("task is: ", task);
 
     /* ~~This code decides how to do it ~~ */
     if (task == "none") {
@@ -162,6 +177,16 @@ bot.direction = function(game) {
         if (myDir === undefined) {
             bot.clearAvoid();
             myDir = bot.nextStep(game.myBot.pos, grabFlower.pos);
+        }
+    }
+    
+    else if (task == "steal from winner") {
+        console.log("stealing from winner");
+        myDir = bot.nextStep(game.myBot.pos, currentWinner.pos);
+
+        if (myDir === undefined) {
+            bot.clearAvoid();
+            myDir = bot.nextStep(game.myBot.pos, currentWinner.pos);
         }
     }
 

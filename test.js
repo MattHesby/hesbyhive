@@ -1,6 +1,6 @@
 var bot = require("./bot"); //Don't change this
 bot.hostURL = 'http://rainierai19-matthesby1.c9users.io'; //Put the server url/IP adress here!
-bot.key = "n02q3j7xifs"; //Set your bot key to this string!
+bot.key = "temlo5z33bl"; //Set your bot key to this string!
 /***************************************************/
 //Write your code in this function!!!
 bot.direction = function(game) {
@@ -10,8 +10,6 @@ bot.direction = function(game) {
     var enemyBases = [];
     var myDir = "none";
     var grabNear = false;
-    // bot.savedData.push("what");
-    console.log(game.myBot);
 
     var dirs = ["north", "east", "south", "west"];
 
@@ -65,7 +63,7 @@ bot.direction = function(game) {
     var grabBase = false;
     var nearBase = enemyBases[0];
     for (let i = 0; i < enemyBases.length; i++) {
-        if (bot.findDistance(game.myBot.pos, enemyBases[i].pos) >= 2 && enemyBases[i].pollen > 50 && bot.findDistance(enemyBots[i].pos, enemyBases[i].pos) > 5) {
+        if (bot.findDistance(game.myBot.pos, enemyBases[i].pos) <= 3 && enemyBases[i].pollen > 50 && bot.findDistance(enemyBots[i].pos, enemyBases[i].pos) > 4) {
             nearBase = enemyBases[i];
             grabBase = true;
         }
