@@ -22,7 +22,7 @@
     "hbs": "~2.8.0",
     "kue": "^0.8.11",
     "less-middleware": "1.0.x",
-    "mongoose": "^4.0.0",
+    "mongoose": "^5.7.7",
     "morgan": "~1.5.1",
     "passport": "^0.2.1",
     "passport-local": "^1.0.0",
